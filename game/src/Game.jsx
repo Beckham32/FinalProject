@@ -7,8 +7,8 @@ function App() {
   // Possible Values: menu, loading, game, paused, death
   const [gameState, setGameState] = useState("game"); // Change to 'menu' in build
 
-  const [frameRate, setFrameRate] = useState(0);
-  const sharedRef = useRef({
+  const [frameRate, setFrameRate] = useState(0); // Temp
+  const sharedRef = useRef({ // Shared state across P5 and React
     heroName: "",
     health: 100,
     mana: 100,
@@ -28,7 +28,7 @@ function App() {
     sharedRef.current.gameState = gameState;
   }, [gameState]);
 
-  useEffect(() => {
+  useEffect(() => { // Update refs from sharedRef every 100ms (0.1s)
     const interval = setInterval(() => {
       if (frameRate !== sharedRef.current.frameRate) {
         setFrameRate(sharedRef.current.frameRate);
@@ -37,7 +37,7 @@ function App() {
     return () => clearInterval(interval);
   }, [frameRate]);
 
-  const onFormSubmit = (event) => {
+  const onFormSubmit = (event) => { // Handle form submission
     event.preventDefault();
     const formData = new FormData(event.target);
     sharedRef.current.heroName = formData.get("hero-name");

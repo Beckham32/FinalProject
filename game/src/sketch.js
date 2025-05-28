@@ -1,10 +1,10 @@
-import gameData from './data/gameData.json';
+import gameData from './data/gameData.json'; // Import game data
 
 export default function sketch(p, sharedRef) {
-  let game;
+  let game; // Declare game variable
 
   class Game {
-    constructor() {
+    constructor() { // Initialize game state and components
       this.state = sharedRef.current.gameState;
       this.player = new Player(this);
       this.world = new World(this);
@@ -14,19 +14,19 @@ export default function sketch(p, sharedRef) {
       this.children.push(this.player);
       this.children.push(this.world);
     }
-    show() {
+    show() { // Render game components
       for (let child of this.children) {
         child.show();
       }
     }
-    update() {
+    update() { // Update game components
       for (let child of this.children) {
         child.update();
       }
     }
   }
 
-  class Player {
+  class Player { // Player class to handle player properties and actions
     constructor(game) {
       this.game = game;
       this.name = sharedRef.current.heroName;
@@ -45,13 +45,13 @@ export default function sketch(p, sharedRef) {
       this.level = 1;
       this.armor = [];
     }
-    show() {
+    show() { // Draw the player on the canvas
       p.fill(255, 204, 0);
       p.stroke(168, 135, 0);
       p.strokeWeight(4)
       p.ellipse(this.x, this.y, this.size);
     }
-    update() {
+    update() { // Update player position based on input
       if (p.keyIsDown(p.LEFT_ARROW) || p.keyIsDown("a")) this.velocityX -= this.acceleration;
       if (p.keyIsDown(p.RIGHT_ARROW) || p.keyIsDown("d")) this.velocityX += this.acceleration;
       if (p.keyIsDown(p.UP_ARROW) || p.keyIsDown("w")) this.velocityY -= this.acceleration;
@@ -68,41 +68,41 @@ export default function sketch(p, sharedRef) {
     }
   }
 
-  class World {
+  class World { // World class to manage game world properties
     constructor(game) {
       this.game = game;
-      this.biomes = gameData.biomes;
+      this.biomes = gameData.biomes; // Load biomes from game data
     }
-    show() {
+    show() { // Render the world from grid.py
 
     }
-    update() {
+    update() { // Update center world position based on player
 
     }
   }
 
-  class ItemSystem {
+  class ItemSystem { // Item system to manage items and inventory
     constructor(game) {
       this.game = game;
       this.item = new Item(this);
       this.inventory = new Inventory(this);
-      this.items = gameData.items;
+      this.items = gameData.items; // Load items from game data
     }
   }
 
-  class Item {
+  class Item { // Item class to handle individual item properties
     constructor(ItemSystem) {
       this.itemSystem = ItemSystem
     }
   }
 
-  class Inventory {
+  class Inventory { // Inventory class to manage player's inventory
     constructor(ItemSystem) {
       this.itemSystem = ItemSystem
     }
   }
 
-  function syncRef() {
+  function syncRef() { // Synchronize game state with sharedRef
     const ref = sharedRef.current;
 
     game.state = ref.gameState;
@@ -114,22 +114,22 @@ export default function sketch(p, sharedRef) {
     ref.frameRate = p.frameRate();
   }
 
-  p.setup = function () {
+  p.setup = function () { // Setup the p5 canvas and initialize the game
     p.createCanvas(p.windowWidth, p.windowHeight);
     game = new Game();
   }
   
-  p.windowResized = function () {
+  p.windowResized = function () { // Handle window resize to adjust canvas and player position
     p.resizeCanvas(p.windowWidth, p.windowHeight);
     game.player.x = p.windowWidth / 2;
     game.player.y = p.windowHeight / 2;
   }
 
-  p.draw = function () {
+  p.draw = function () { // Main draw loop to render the game
     p.background(28, 28, 28);
-    syncRef();
+    syncRef(); // Synchronize game state with sharedRef every frame
 
-    if (game.state === "game") {
+    if (game.state === "game") { // Only update and show game components if in game state
       game.show();
       game.update();
     }

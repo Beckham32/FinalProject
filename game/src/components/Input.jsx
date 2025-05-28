@@ -1,8 +1,8 @@
 import { motion } from "motion/react";
 
 function Input(props) {
-  if (props.type === "button" || props.type === "submit") {
-    return (
+  if (props.type === "button" || props.type === "submit") { // Check if the input is a button or submit type
+    return ( // Use motion.button for animations
       <motion.button
         {...props}
         whileHover={{
@@ -18,7 +18,7 @@ function Input(props) {
       </motion.button>
     );
   }
-  return (
+  return ( // For other input types, use a regular input element
     <input
       {...props}
       className={`px-5 py-2 text-2xl border-8 ridge border-border-wood outline-black outline-3 inset-ring-2 inset-ring-black placeholder:text-dark bg-gradient-to-br from-ingrain to-tan text-dark ${
