@@ -1,0 +1,149 @@
+{
+  "biomes": [
+    {
+      "id": "forest",
+      "name": "Whispering Woods",
+      "description": "A lush forest with rustling leaves and hidden secrets.",
+      "backgroundColor": "#3a5f0b",
+      "enemies": ["goblin", "wolf"],
+      "resources": ["wood", "herbs"],
+      "difficulty": 1
+    },
+    {
+      "id": "plains",
+      "name": "Sunmeadow Fields",
+      "description": "Open fields filled with sunlight, roaming deer, and foraging grounds.",
+      "backgroundColor": "#a3c962",
+      "enemies": ["bandit", "boar"],
+      "resources": ["grain", "leather"],
+      "difficulty": 1
+    },
+    {
+      "id": "desert",
+      "name": "Scorched Sands",
+      "description": "An arid wasteland with unforgiving heat and ancient ruins.",
+      "backgroundColor": "#d2a95a",
+      "enemies": ["scorpion", "sandWraith"],
+      "resources": ["copper", "cactusJuice"],
+      "difficulty": 2
+    },
+    {
+      "id": "mountain",
+      "name": "Frostpeak Range",
+      "description": "Icy cliffs where the air is thin and the beasts are thick-skinned.",
+      "backgroundColor": "#7da4c3",
+      "enemies": ["iceGolem", "snowWolf"],
+      "resources": ["iceCrystal", "stone"],
+      "difficulty": 3
+    }
+  ],
+  "items": [
+    {
+      "id": "wood",
+      "name": "Wood Log",
+      "type": "material"
+    },
+    {
+      "id": "leather",
+      "name": "Leather Hide",
+      "type": "material"
+    },
+    {
+      "id": "coal",
+      "name": "Coal",
+      "type": "ore"
+    },
+    {
+      "id": "unrefined_copper",
+      "name": "Unrefined Copper",
+      "type": "ore"
+    },
+    {
+      "id": "sand",
+      "name": "Sand",
+      "type": "material"
+    },
+    {
+      "id": "chamomile",
+      "name": "Clump of Chamomile",
+      "type": "herb"
+    }, 
+    {
+      "id": "glass",
+      "name": "Glass Shard",
+      "type": "material",
+      "recipe": {
+        "sand": 6,
+        "coal": 2
+      },
+      "via": "blasting",
+      "amount": 2
+    },
+    {
+      "id": "stick",
+      "name": "Wooden Stick",
+      "type": "material",
+      "recipe": {
+        "wood": 2
+      },
+      "via": "crafting",
+      "amount": 8
+    },
+    {
+      "id": "leather_wrapped_stick",
+      "name": "Leather Wrapped Stick",
+      "type": "material",
+      "recipe": {
+        "stick": 2,
+        "leather": 1
+      },
+      "via": "crafting"
+    },
+    {
+      "id": "copper_ingot",
+      "name": "Copper Ingot",
+      "type": "material",
+      "recipe": {
+        "unrefined_copper": 1, 
+        "coal": 1
+      },
+      "via": "blasting"
+    },
+    {
+      "id": "water_flask",
+      "name": "Flask of Water",
+      "type": "material",
+      "recipe": {
+        "glass": 1, 
+        "coal": 1
+      },
+      "via": "blasting"
+    },
+    {
+      "id": "copper_sword",
+      "name": "Copper Sword",
+      "type": "weapon",
+      "rarity": "common",
+      "damage": 8,
+      "value": 30,
+      "recipe": {
+        "copper": 3,
+        "leather_wrapped_stick": 1
+      },
+      "via": "crafting"
+    },
+    {
+      "id": "health_potion",
+      "name": "Health Potion",
+      "type": "consumable",
+      "rarity": "uncommon",
+      "effect": "restore_health",
+      "value": 50,
+      "restoreAmount": 40,
+      "recipe": {
+        "chamomile": 5,
+        "water_flask": 1
+      }
+    }
+  ]
+}

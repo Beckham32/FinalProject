@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  --color-border-wood: #7B4B29;
+  --color-wood:rgb(68, 41, 23);
+  --color-dark-wood:rgb(48, 29, 16);
+  --color-ingrain:rgb(153, 106, 67);
+  --color-parchment: #F4EBD0;
+  --color-dark:rgb(19, 19, 19);
+  --color-tan:rgb(216, 189, 131);
+}
+
+/*
+| Wood Brown | `#7B4B29` | Buttons, accents | 
+| Parchment | `#F4EBD0` | Background | 
+| Forest Green | `#2E4A34` | Borders, hover effects | 
+| Ash Gray | `#B3A580` | Secondary background/shadows |
+| Gold Accent | `#D6B370` | Highlights, icon tint |
+*/
+
+button {
+  cursor: pointer;
+}
+
+.ridge {
+  border-style: ridge;
+}
+
+.canvas-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+#p5-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.ui-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100vw;
+  padding: 2rem;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
