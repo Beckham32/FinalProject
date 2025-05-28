@@ -1,8 +1,11 @@
-# Persistent RPG Game – Dynamic World Adventure
+# Persistent RPG Game
 
 ## 📘 Overview
 
-This project is a persistent, API-driven RPG where the player explores an evolving open world, completes quests, dives into procedurally generated dungeons, and interacts with NPCs whose behaviour adapts using AI. Combat, inventory, quests, and dynamic world events form the core gameplay loop.
+This project is a *persistent*, RPG where the player explores an evolving open world, completes quests, dives into procedurally generated dungeons, and interacts with NPCs whose behaviour adapts using AI. Combat, inventory, quests, and dynamic world events form the core gameplay loop.
+
+NOTE:
+Parts of this will not be finished for Beta Release.
 
 ---
 
@@ -14,7 +17,6 @@ This project is a persistent, API-driven RPG where the player explores an evolvi
 - **NPCs & Quests**: Provide narrative, rewards, and player choices.
 - **Dungeons**: Procedural or handcrafted challenges with loot and enemies.
 - **Combat & Gear**: Turn-based or action combat, loot scaling, gear progression.
-- **API Integration**: Drives loot generation and quests.
 
 ---
 
@@ -46,12 +48,6 @@ This project is a persistent, API-driven RPG where the player explores an evolvi
 
 - **Time-Based Content**: 
   - Quests, dungeons, and shops vary based on real-world date/time.
-- **Loot Generation**: 
-  - APIs scale loot drops by difficulty and context.
-- **Dungeon Generation**: 
-  - Procedural layouts and monster density fetched from an external API.
-- **Quest Generation**: 
-  - Dynamic quests from the quest APIs
 - **AI Behavior**: 
   - External logic can guide monster strategies in combat.
 
@@ -61,7 +57,6 @@ This project is a persistent, API-driven RPG where the player explores an evolvi
 
 - **Procedural Layouts**: Randomized room and enemy placement.
 - **Dynamic Difficulty**: Scales with player level or location.
-- **Loot Scaling**: API-driven gear based on dungeon type and rarity.
 - **Combat Options**: Turn-based, action, or hybrid systems supported.
 
 ---
