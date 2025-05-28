@@ -92,6 +92,7 @@ function App() {
                 ></div>
               </div>
             </div>
+
             {/* Level Badge */}
             <div className="absolute top-6 right-6">
               <div className="relative w-17 h-17">
@@ -102,6 +103,21 @@ function App() {
                 </div>
               </div>
             </div>
+
+            <div className="absolute top-1/2 right-4">
+              <div className="grid grid-cols-1">
+                <div className="py-4 px-6 text-2xl border-8 ridge border-border-wood outline-black outline-3 ring-inset ring-2 ring-black bg-gradient-to-b from-wood to-dark-wood text-tan rounded-sm ">
+                  1
+                </div>
+                <div className="py-4 px-6 text-2xl border-8 ridge border-border-wood outline-black outline-3 ring-inset ring-2 ring-black bg-gradient-to-b from-wood to-dark-wood text-tan rounded-sm ">
+                  2
+                </div>
+                <div className="py-4 px-6 text-2xl border-8 ridge border-border-wood outline-black outline-3 ring-inset ring-2 ring-black bg-gradient-to-b from-wood to-dark-wood text-tan rounded-sm ">
+                  3
+                </div>
+              </div>
+            </div>
+
             <div className="text-white absolute bottom-4 left-4 text-xl">
               FPS: {frameRate.toFixed(1)}
             </div>

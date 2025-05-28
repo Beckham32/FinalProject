@@ -10,14 +10,6 @@
   --color-tan:rgb(216, 189, 131);
 }
 
-/*
-| Wood Brown | `#7B4B29` | Buttons, accents | 
-| Parchment | `#F4EBD0` | Background | 
-| Forest Green | `#2E4A34` | Borders, hover effects | 
-| Ash Gray | `#B3A580` | Secondary background/shadows |
-| Gold Accent | `#D6B370` | Highlights, icon tint |
-*/
-
 button {
   cursor: pointer;
 }
