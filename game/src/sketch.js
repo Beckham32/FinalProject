@@ -1,4 +1,5 @@
 import gameData from './data/gameData.json'; // Import game data
+import map from './data/map.json'; // Import Map
 
 export default function sketch(p, sharedRef) {
   let game; // Declare game variable
@@ -48,7 +49,7 @@ export default function sketch(p, sharedRef) {
     show() { // Draw the player on the canvas
       p.fill(255, 204, 0);
       p.stroke(168, 135, 0);
-      p.strokeWeight(4)
+      p.stroke(4)
       p.ellipse(this.x, this.y, this.size);
     }
     update() { // Update player position based on input
@@ -72,9 +73,32 @@ export default function sketch(p, sharedRef) {
     constructor(game) {
       this.game = game;
       this.biomes = gameData.biomes; // Load biomes from game data
+      this.renderFlag = false;
     }
-    show() { // Render the world from grid.py
-
+    show() {
+      if (!this.renderFlag) {
+        let tileSize = 3; // 1 pixel per tile
+        for (let r = 0; r < map.length; r++) {
+          for (let c = 0; c < map[r].length; c++) {
+            let terrain = map[r][c];
+            let col;
+            switch (terrain) {
+              case "wa": col = p.color("#1E3F66"); break;      // Water
+              case "sa": col = p.color("#d2b48c"); break;      // Sand
+              case "pl": col = p.color("#a3c962"); break;      // Plains
+              case "fo": col = p.color("#3a5f0b"); break;      // Forest
+              case "de": col = p.color("#d2a95a"); break;      // Desert
+              case "mo": col = p.color("#7f8c8d"); break;      // Mountain
+              case "sn": col = p.color("#ffffff"); break;      // Snow
+              default: col = p.color("#000000"); break;      // Fallback
+            }
+            p.noStroke();
+            p.fill(col);
+            p.rect(c * tileSize, r * tileSize, tileSize, tileSize);
+          }
+        }
+        // this.renderFlag = true;
+      }
     }
     update() { // Update center world position based on player
 
@@ -110,6 +134,8 @@ export default function sketch(p, sharedRef) {
 
     ref.health = game.player.health;
     ref.mana = game.player.mana;
+    ref.maxHealth = game.player.maxHealth;
+    ref.maxMana = game.player.maxMana;
     ref.level = game.player.level;
     ref.frameRate = p.frameRate();
   }
