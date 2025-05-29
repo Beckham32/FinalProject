@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { LayoutGroup } from "motion/react";
 
 const TABS = ["Settings", "Map", "Inventory"];
 
@@ -73,7 +74,7 @@ function PauseMenu({ onClose }) {
           </div>
 
           <div className="w-1/3">
-            <h3 className="text-lg font-semibold mb-2">Armor</h3>
+            <h3 className="text-lg font-semibold my-2">Armor</h3>
             <div className="grid grid-cols-1 gap-3">
               {["helmet", "chest", "legs", "boots"].map((slot) => {
                 const item = sampleArmor[slot];
@@ -92,7 +93,9 @@ function PauseMenu({ onClose }) {
         </div>
 
         <div className="flex flex-col ">
-          <h3 className="text-lg font-semibold mb-2 flex justify-center">Tools</h3>
+          <h3 className="text-lg font-semibold mb-2 flex justify-center">
+            Tools
+          </h3>
           <div className="flex flex-row justify-center">
             {sampleTools.map((tool) => (
               <div
@@ -119,7 +122,7 @@ function PauseMenu({ onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black text-gold font-serif flex flex-col max-w-4xl w-full mx-auto my-12 rounded-lg shadow-lg overflow-hidden">
+    <div className="bg-black text-gold font-serif flex flex-col items-center justify-center w-full mx-auto overflow-hidden">
       <header className="flex border-b border-gold bg-black/80">
         {TABS.map((tab) => (
           <button
