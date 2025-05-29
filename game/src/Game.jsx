@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import "./Game.css";
 import P5Wrapper from "./components/P5Canvas.jsx";
 import Input from "./components/Input.jsx";
+import PauseMenu from "./components/PauseMenu.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCrown,
@@ -12,7 +13,7 @@ import {
 
 function App() {
   // Possible Values: menu, loading, game, paused, death
-  const [gameState, setGameState] = useState("menu"); // Change to 'menu' in build
+  const [gameState, setGameState] = useState("game"); // Change to 'menu' in build
 
   const [frameRate, setFrameRate] = useState(0); // Temp
   const sharedRef = useRef({
@@ -32,7 +33,7 @@ function App() {
       const timer = setTimeout(() => {
         setGameState("game");
         sharedRef.current.gameState = "game";
-      }, 1000);
+      }, 500);
       return () => clearTimeout(timer);
     }
     sharedRef.current.gameState = gameState;
@@ -64,6 +65,12 @@ function App() {
           gameState !== "game" && "bg-wood"
         }`}
       >
+        {gameState === "paused" && (
+          <>
+            {console.log("Rendering Pause Menu")}
+            <PauseMenu onClose={() => setGameState("game")} />
+          </>
+        )}
         {gameState === "menu" && (
           <>
             <h1 className="text-4xl text-tan font-bold p-8 space-y-6">
@@ -88,7 +95,7 @@ function App() {
         )}
         {gameState === "game" && (
           <>
-            <div className="absolute top-5 left-5 flex items-start space-x-8 text-gold font-serif">
+            <div className="absolute top-5 left-5 flex items-start space-x-8 text-gold font-serif bg-black/70 p-5 rounded-lg shadow-lg">
               {/* Level Badge */}
               <div className="relative w-20 h-20 mt-4 rounded-full bg-gradient-to-br from-[#1a1109] to-black shadow-2xl border-[3px] border-gold flex items-center justify-center text-4xl font-extrabold text-gold tracking-widest ring-[3px] ring-gold/50 z-10">
                 {/* Outer Decorative Ring */}
@@ -158,7 +165,7 @@ function App() {
               </div>
             </div>
 
-            {/* Quick Action Buttons */}
+            {/* Quick Slots */}
             <div className="absolute top-1/2 right-4 -translate-y-1/2 space-y-4 flex flex-col">
               {[1, 2, 3].map((num) => (
                 <button
@@ -175,10 +182,11 @@ function App() {
               FPS: {frameRate.toFixed(1)}
             </div>
 
+            {/* Pause Menu Button */}
             <div className="absolute top-4 right-4">
               <button
                 className="py-3 px-4.5 text-xl border-2 border-gold bg-black/70 text-gold rounded-lg shadow-lg hover:bg-gold hover:text-black transition-colors duration-200"
-                onClick={() => setGameState("menu")}
+                onClick={() => setGameState("paused")}
               >
                 <FontAwesomeIcon icon={faBars} />
               </button>

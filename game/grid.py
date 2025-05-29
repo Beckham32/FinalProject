@@ -15,7 +15,7 @@ def generate_island_noise(shape, octaves=6):
             nx, ny = i / height, j / width
             distance = np.sqrt((j - center_x) ** 2 + (i - center_y) ** 2) / max_distance
             elevation = noise([nx, ny]) * 0.5 + 0.5  # Normalize to [0,1]
-            attenuation = 1 - distance ** 2.5        # More aggressive falloff
+            attenuation = 1 - distance ** 2.5
             elevation *= attenuation
             noise_array[i][j] = elevation
 
@@ -41,9 +41,9 @@ def create_biome_grid(rows, cols, noise, beach_width=6, water_border=10):
             edge_distance = min(r, rows - r - 1, c, cols - c - 1)
 
             if edge_distance < effective_water_border:
-                terrain = "wa"  # Wavy water edge
+                terrain = "wa" # Wavy water edge
             elif edge_distance < effective_water_border + beach_width:
-                terrain = "sa"  # Sand (beach inside water)
+                terrain = "sa" # Sand (beach inside water)
             else:
                 val = noise[r, c]
                 if val < 0.15:
