@@ -216,22 +216,24 @@ export default function sketch(p, sharedRef) {
     if (isPaused) {
       return;
     }
-    setTimeout(() => {
-      game.player.x = p.windowWidth / 2;
-      game.player.y = p.windowHeight / 2;
-    }, 1000);
+    // game.player.x = p.windowWidth / 2;
+    // game.player.y = p.windowHeight / 2;
     // Handle window resize to adjust canvas and player position
     p.resizeCanvas(p.windowWidth, p.windowHeight);
-    
   };
 
   p.draw = function () {
     if (game.state === "paused") {
-      // If the game is paused, do not update or render game components
-      isPaused = true;
-      p.noLoop(); // Stop the draw loop
+      // Stop the draw loop to keep the map rendered
+      p.noLoop();
       return;
     }
+
+    if (!p.isLooping()) {
+      // Resume the draw loop if the game is not paused
+      p.loop();
+    }
+
     // Main draw loop to render the game
     p.background(28, 28, 28);
     syncRef(); // Synchronize game state with sharedRef every frame

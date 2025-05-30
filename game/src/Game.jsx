@@ -11,7 +11,7 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 
-function App() {
+function Game() {
   // Possible Values: menu, loading, game, paused, death
   const [gameState, setGameState] = useState("game"); // Change to 'menu' in build
 
@@ -35,6 +35,9 @@ function App() {
         sharedRef.current.gameState = "game";
       }, 500);
       return () => clearTimeout(timer);
+    } else if (gameState === "game") {
+      setGameState("game");
+      sharedRef.current.gameState = "game";
     }
     sharedRef.current.gameState = gameState;
   }, [gameState]);
@@ -60,17 +63,14 @@ function App() {
   return (
     <div className="canvas-container">
       <P5Wrapper sharedRef={sharedRef} />
+      {gameState === "paused" && (
+        <PauseMenu onClose={() => setGameState("game")} />
+      )}
       <main
         className={`ui-overlay flex flex-col items-center justify-center h-full w-full ${
           gameState !== "game" && "bg-wood"
         }`}
       >
-        {gameState === "paused" && (
-          <>
-            {console.log("Rendering Pause Menu")}
-            <PauseMenu onClose={() => setGameState("game")} />
-          </>
-        )}
         {gameState === "menu" && (
           <>
             <h1 className="text-4xl text-tan font-bold p-8 space-y-6">
@@ -126,7 +126,7 @@ function App() {
 
                   <div className="w-full h-full border-b-3 border-parchment relative shadow-lg">
                     <div
-                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#7c1818] via-[#ca4040] to-[#f78c8c] transition-all duration-300"
+                      className="absolute top-0 left-0 h-full bg-[#ca4040] transition-all duration-300"
                       style={{
                         width: `${
                           (sharedRef.current.health /
@@ -148,7 +148,7 @@ function App() {
                   </span>
                   <div className="w-full h-full border-b-3 border-parchment relative shadow-lg">
                     <div
-                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#103477] via-[#3e7bc4] to-[#91b9eb] transition-all duration-300"
+                      className="absolute top-0 left-0 h-full bg-[#3e7bc4] transition-all duration-300"
                       style={{
                         width: `${
                           (sharedRef.current.mana / sharedRef.current.maxMana) *
@@ -198,4 +198,4 @@ function App() {
   );
 }
 
-export default App;
+export default Game;
