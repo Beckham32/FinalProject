@@ -13,7 +13,7 @@ import {
 
 function Game() {
   // Possible Values: menu, loading, game, paused, death
-  const [gameState, setGameState] = useState("game"); // Change to 'menu' in build
+  const [gameState, setGameState] = useState("menu");
 
   const [frameRate, setFrameRate] = useState(0); // Temp
   const sharedRef = useRef({
@@ -35,9 +35,6 @@ function Game() {
         sharedRef.current.gameState = "game";
       }, 500);
       return () => clearTimeout(timer);
-    } else if (gameState === "game") {
-      setGameState("game");
-      sharedRef.current.gameState = "game";
     }
     sharedRef.current.gameState = gameState;
   }, [gameState]);
@@ -60,19 +57,17 @@ function Game() {
     setGameState("loading");
   };
 
+  const handleClose = (event) => {
+    setGameState("game");
+  };
+
   return (
     <div className="canvas-container">
       <P5Wrapper sharedRef={sharedRef} />
-      {gameState === "paused" && (
-        <PauseMenu onClose={() => setGameState("game")} />
-      )}
-      <main
-        className={`ui-overlay flex flex-col items-center justify-center h-full w-full ${
-          gameState !== "game" && "bg-wood"
-        }`}
-      >
+      {gameState === "paused" && <PauseMenu onClose={handleClose} />}
+      <main className="ui-overlay flex flex-col items-center justify-center h-full w-full bg-transparent">
         {gameState === "menu" && (
-          <>
+          <div className="bg-wood w-full min-h-screen flex flex-col items-center justify-center">
             <h1 className="text-4xl text-tan font-bold p-8 space-y-6">
               Welcome to the Game
             </h1>
@@ -88,10 +83,12 @@ function Game() {
               />
               <Input type="submit" value="Start Game" />
             </form>
-          </>
+          </div>
         )}
         {gameState === "loading" && (
-          <div className="text-tan">Loading World...</div>
+          <div className="text-tan bg-wood w-full min-h-screen flex flex-col items-center justify-center">
+            Loading World...
+          </div>
         )}
         {gameState === "game" && (
           <>

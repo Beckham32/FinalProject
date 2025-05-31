@@ -29,7 +29,7 @@ function PauseMenu({ onClose }) {
 
   function renderQuests() {
     return (
-      <div className="p-4">
+      <div className="p-4 bg-slate-950 min-h-screen">
         <h2 className="text-xl font-bold mb-4">Quests</h2>
         <p>Quests.</p>
       </div>
@@ -38,7 +38,7 @@ function PauseMenu({ onClose }) {
 
   function renderBlasting() {
     return (
-      <div className="p-4">
+      <div className="p-4 bg-slate-950 min-h-screen">
         <h2 className="text-xl font-bold mb-4">Blasting</h2>
         <p>Blasting.</p>
       </div>
@@ -47,7 +47,7 @@ function PauseMenu({ onClose }) {
 
   function renderCrafting() {
     return (
-      <div className="p-4">
+      <div className="p-4 bg-slate-950 min-h-screen">
         <h2 className="text-xl font-bold mb-4">Crafting</h2>
         <p>Crafting.</p>
       </div>
@@ -56,7 +56,7 @@ function PauseMenu({ onClose }) {
 
   function renderSettings() {
     return (
-      <div className="p-4">
+      <div className="p-4 bg-slate-950 min-h-screen">
         <h2 className="text-xl font-bold mb-4">Settings</h2>
         <p>Audio, Video, Controls, etc.</p>
       </div>
@@ -64,18 +64,13 @@ function PauseMenu({ onClose }) {
   }
 
   function renderMap() {
-    return (
-      <div className="p-4">
-        <h2 className="text-xl font-bold mb-4">Map</h2>
-        <p>World map and player location goes here.</p>
-      </div>
-    );
+    return <div className="px-4 pb-8 min-h-screen"></div>;
   }
 
   function renderInventory() {
     return (
       <>
-        <div className="p-4 flex space-x-8 justify-center">
+        <div className="p-4 flex space-x-8 justify-center bg-slate-950 min-h-screen">
           <div className="">
             <h3 className="text-lg font-semibold my-2">Armor</h3>
             <div className="grid grid-cols-1 gap-3">
@@ -126,7 +121,8 @@ function PauseMenu({ onClose }) {
                   className="border border-gold rounded p-2 bg-black/70 text-gold flex items-center justify-between h-12"
                   title={item.name}
                 >
-                  <span>{item.name}</span>
+                  <img className="w-8 h-8 rounded me-4" src="https://picsum.photos/200" alt="icon" />
+                  <span className="flex-1">{item.name}</span>
                   <span className="text-sm font-sans font-bold">
                     x{item.count}
                   </span>
@@ -167,7 +163,7 @@ function PauseMenu({ onClose }) {
   }
 
   return (
-    <div className="bg-slate-950 text-gold font-serif flex flex-col items-center justify-center w-full h-full fixed top-0 left-0 z-50 overflow-hidden select-none">
+    <div className="text-gold font-serif flex flex-col items-center justify-center w-full h-full fixed top-0 left-0 z-3 overflow-hidden select-none">
       <header className="flex bg-black/80 w-full">
         <LayoutGroup>
           <ul className="flex w-full">

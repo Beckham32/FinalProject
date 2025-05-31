@@ -34,17 +34,17 @@ export default function sketch(p, sharedRef) {
     constructor(game) {
       this.game = game;
       this.name = sharedRef.current.heroName;
-      this.x = 0; // Player's world position (start at the center of the map)
-      this.y = 0;
-      this.size = 50;
+      this.x = (map[0].length * game.world.tileSize) / 2;
+      this.y = (map.length * game.world.tileSize) / 2;
+      this.size = 64;
       this.velocityX = 0;
       this.velocityY = 0;
       this.maxHealth = 100;
       this.health = 100;
       this.maxMana = 100;
       this.mana = 100;
-      this.acceleration = 0.5;
-      this.maxSpeed = 5;
+      this.acceleration = 1.5;
+      this.maxSpeed = 8;
       this.friction = 0.9;
       this.level = 1;
       this.armor = [];
@@ -52,37 +52,54 @@ export default function sketch(p, sharedRef) {
 
     show() {
       // Draw the player at the center of the screen
-      p.fill(255, 204, 0);
-      p.noStroke();
+      p.fill(255, 0, 0);
       p.ellipse(p.width / 2, p.height / 2, this.size);
     }
 
     update() {
-      // Update player's world position based on input
+      // Calculate intended velocity based on input
+      let nextVelocityX = this.velocityX;
+      let nextVelocityY = this.velocityY;
+
       if (p.keyIsDown(p.LEFT_ARROW) || p.keyIsDown("a"))
-        this.velocityX -= this.acceleration;
+        nextVelocityX -= this.acceleration;
       if (p.keyIsDown(p.RIGHT_ARROW) || p.keyIsDown("d"))
-        this.velocityX += this.acceleration;
+        nextVelocityX += this.acceleration;
       if (p.keyIsDown(p.UP_ARROW) || p.keyIsDown("w"))
-        this.velocityY -= this.acceleration;
+        nextVelocityY -= this.acceleration;
       if (p.keyIsDown(p.DOWN_ARROW) || p.keyIsDown("s"))
-        this.velocityY += this.acceleration;
+        nextVelocityY += this.acceleration;
 
-      this.velocityX *= this.friction;
-      this.velocityY *= this.friction;
+      nextVelocityX *= this.friction;
+      nextVelocityY *= this.friction;
 
-      this.velocityX = p.constrain(
-        this.velocityX,
-        -this.maxSpeed,
-        this.maxSpeed
+      nextVelocityX = p.constrain(nextVelocityX, -this.maxSpeed, this.maxSpeed);
+      nextVelocityY = p.constrain(nextVelocityY, -this.maxSpeed, this.maxSpeed);
+
+      // Predict next position
+      const nextX = this.x + nextVelocityX;
+      const nextY = this.y + nextVelocityY;
+
+      const nextTileX = Math.floor(nextX / this.game.world.tileSize);
+      const nextTileY = Math.floor(nextY / this.game.world.tileSize);
+
+      const terrainCode = map[nextTileY]?.[nextTileX];
+      const biomeObj = this.game.world.biomes.find(
+        (b) => b.code === terrainCode
       );
-      this.velocityY = p.constrain(
-        this.velocityY,
-        -this.maxSpeed,
-        this.maxSpeed
-      );
+      const biomeName = biomeObj ? biomeObj.name : "Unknown";
 
-      this.x += this.velocityX; // Update world position
+      // Block movement into Ocean or Mountain
+      if (biomeName === "Mountain" || biomeName === "Ocean") {
+        this.velocityX = 0;
+        this.velocityY = 0;
+        return;
+      }
+
+      // If not blocked, apply movement
+      this.velocityX = nextVelocityX;
+      this.velocityY = nextVelocityY;
+      this.x += this.velocityX;
       this.y += this.velocityY;
     }
   }
@@ -92,77 +109,99 @@ export default function sketch(p, sharedRef) {
     constructor(game) {
       this.game = game;
       this.biomes = gameData.biomes; // Load biomes from game data
-      this.renderFlag = false;
-      this.buffer = null; // p5.Graphics buffer for the world
-      this.tileSize = 50; // Size of each tile in pixels
-      this.centerX = p.windowWidth / 2;
-      this.centerY = p.windowHeight / 2;
-      this.cameraX = 0;
-      this.cameraY = 0;
-      this.cameraSpeed = 0.1; // Speed of camera movement
+      this.tileSize = 64; // Size of each tile in pixels
+      this.tileColors = {
+        wa: p.color("#1E3F66"),
+        sa: p.color("#d2b48c"),
+        pl: p.color("#B6E468"),
+        fo: p.color("#3a5f0b"),
+        co: p.color("#203119"),
+        gr: p.color("#CCCE44"),
+        mo: p.color("#555555"),
+        default: p.color("#000000"),
+      };
     }
     show() {
-      // Create the buffer if it doesn't exist
-      if (!this.buffer) {
-        this.buffer = p.createGraphics(
-          map[0].length * this.tileSize,
-          map.length * this.tileSize
-        );
-        this.buffer.noStroke();
+      const tilesInViewX = Math.ceil(p.windowWidth / this.tileSize) + 2;
+      const tilesInViewY = Math.ceil(p.windowHeight / this.tileSize) + 2;
 
-        // Render the entire map to the buffer
-        for (let r = 0; r < map.length; r++) {
-          for (let c = 0; c < map[r].length; c++) {
-            let terrain = map[r][c];
-            let col;
-            switch (terrain) {
-              case "wa":
-                col = this.buffer.color("#1E3F66");
-                break; // Water
-              case "sa":
-                col = this.buffer.color("#d2b48c");
-                break; // Sand
-              case "pl":
-                col = this.buffer.color("#a3c962");
-                break; // Plains
-              case "fo":
-                col = this.buffer.color("#3a5f0b");
-                break; // Forest
-              case "de":
-                col = this.buffer.color("#d2a95a");
-                break; // Desert
-              case "mo":
-                col = this.buffer.color("#7f8c8d");
-                break; // Mountain
-              case "sn":
-                col = this.buffer.color("#ffffff");
-                break; // Snow
-              default:
-                col = this.buffer.color("#000000");
-                break; // Fallback
-            }
-            this.buffer.fill(col);
-            this.buffer.rect(
-              c * this.tileSize,
-              r * this.tileSize,
-              this.tileSize,
-              this.tileSize
-            );
-          }
+      const playerTileX = Math.floor(this.game.player.x / this.tileSize);
+      const playerTileY = Math.floor(this.game.player.y / this.tileSize);
+
+      const startX = Math.max(0, playerTileX - Math.floor(tilesInViewX / 2));
+      const startY = Math.max(0, playerTileY - Math.floor(tilesInViewY / 2));
+      const endX = Math.min(map[0].length, startX + tilesInViewX);
+      const endY = Math.min(map.length, startY + tilesInViewY);
+
+      for (let r = startY; r < endY; r++) {
+        for (let c = startX; c < endX; c++) {
+          let terrain = map[r][c];
+          let col = this.tileColors[terrain] || this.tileColors.default;
+          p.fill(col);
+
+          const screenX =
+            p.windowWidth / 2 + (c * this.tileSize - this.game.player.x);
+          const screenY =
+            p.windowHeight / 2 + (r * this.tileSize - this.game.player.y);
+          p.rect(screenX, screenY, this.tileSize, this.tileSize);
         }
       }
-      // Calculate the offset to center the grid on the screen, following the player's position
-      const offsetX =
-        this.centerX -
-        ((this.tileSize * map[0].length) / 2 + this.game.player.x);
-      const offsetY =
-        this.centerY -
-        ((this.tileSize * map[0].length) / 2 + this.game.player.y);
-
-      // Draw the buffer to the main canvas with the calculated offset
-      p.image(this.buffer, offsetX, offsetY);
     }
     update() {}
+  }
+
+  class Minimap {
+    constructor(tileColors, size) {
+      this.biomes = gameData.biomes;
+      this.tileColors = tileColors;
+      this.tileSize = size;
+      this.mapWidth = map[0].length;
+      this.mapHeight = map.length;
+      this.buffer = p.createGraphics(
+        this.mapWidth * this.tileSize,
+        this.mapHeight * this.tileSize
+      );
+      this.buffer.noStroke();
+
+      for (let r = 0; r < this.mapHeight; r++) {
+        for (let c = 0; c < this.mapWidth; c++) {
+          let terrain = map[r][c];
+          let col = this.tileColors[terrain] || this.tileColors.default;
+          this.buffer.fill(col);
+          this.buffer.rect(
+            c * this.tileSize,
+            r * this.tileSize,
+            this.tileSize,
+            this.tileSize
+          );
+        }
+      }
+    }
+
+    show() {
+      const minimapWidth = this.mapWidth * this.tileSize;
+      const minimapHeight = this.mapHeight * this.tileSize;
+      const minimapOffsetX = (p.width - minimapWidth) / 2;
+      const minimapOffsetY = (p.height - minimapHeight) / 2;
+      p.image(this.buffer, minimapOffsetX, minimapOffsetY);
+
+      const playerTileX = Math.floor(game.player.x / game.world.tileSize);
+      const playerTileY = Math.floor(game.player.y / game.world.tileSize);
+      p.fill(255, 0, 0);
+      p.textSize(24);
+      p.textAlign(p.CENTER, p.BOTTOM);
+      p.text(
+        game.player.name || "Player",
+        minimapOffsetX + (playerTileX + 0.5) * this.tileSize,
+        minimapOffsetY + (playerTileY + 0.5) * this.tileSize - 15
+      );
+      p.ellipse(
+        minimapOffsetX + (playerTileX + 0.5) * this.tileSize,
+        minimapOffsetY + (playerTileY + 0.5) * this.tileSize,
+        this.tileSize * 6,
+        this.tileSize * 6
+      );
+    }
   }
 
   class ItemSystem {
@@ -208,38 +247,37 @@ export default function sketch(p, sharedRef) {
     // Setup the p5 canvas and initialize the game
     p.createCanvas(p.windowWidth, p.windowHeight);
     game = new Game();
+    p.noStroke();
   };
 
-  let isPaused = false;
-
   p.windowResized = function () {
-    if (isPaused) {
-      return;
-    }
-    // game.player.x = p.windowWidth / 2;
-    // game.player.y = p.windowHeight / 2;
     // Handle window resize to adjust canvas and player position
     p.resizeCanvas(p.windowWidth, p.windowHeight);
   };
 
+  let minimapInstance = null;
+
   p.draw = function () {
+    syncRef();
+
     if (game.state === "paused") {
-      // Stop the draw loop to keep the map rendered
-      p.noLoop();
+      p.fill(2, 6, 23);
+      p.rect(0, 0, p.windowWidth, p.windowHeight);
+
+      // Only create the minimap buffer once
+      if (!minimapInstance) {
+        minimapInstance = new Minimap(game.world.tileColors, 3);
+      }
+      minimapInstance.show();
       return;
+    } else {
+      // If you want to clear the minimap when unpausing:
+      minimapInstance = null;
     }
 
-    if (!p.isLooping()) {
-      // Resume the draw loop if the game is not paused
-      p.loop();
-    }
-
-    // Main draw loop to render the game
-    p.background(28, 28, 28);
-    syncRef(); // Synchronize game state with sharedRef every frame
+    p.background(30, 63, 102);
 
     if (game.state === "game") {
-      // Only update and show game components if in game state
       game.show();
       game.update();
     }

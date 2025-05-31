@@ -1,6 +1,7 @@
 import json
 import numpy as np
 from perlin_noise import PerlinNoise
+import random
 
 def generate_island_noise(shape, octaves=6):
     noise = PerlinNoise(octaves=octaves)
@@ -25,41 +26,48 @@ def generate_island_noise(shape, octaves=6):
 
     return noise_array
 
-import random
-
 def create_biome_grid(rows, cols, noise, beach_width=6, water_border=10):
     grid = []
 
     for r in range(rows):
         row = []
         for c in range(cols):
-            # Calculate dynamic border thickness with random jitter
-            jitter = random.randint(-2, 2)  # Add noise to the water border (±2 tiles)
-            effective_water_border = max(2, water_border + jitter)
+            # Calculate dynamic border thickness with random jitter for water and beach
+            jitter_water = random.randint(-2, 2)
+            effective_water_border = max(2, water_border + jitter_water)
+            jitter_beach = random.randint(-2, 2)
+            effective_beach_width = max(2, beach_width + jitter_beach)
 
             # Distance to closest edge
             edge_distance = min(r, rows - r - 1, c, cols - c - 1)
 
             if edge_distance < effective_water_border:
-                terrain = "wa" # Wavy water edge
-            elif edge_distance < effective_water_border + beach_width:
-                terrain = "sa" # Sand (beach inside water)
+                terrain = "wa"  # Wavy water edge
+            elif edge_distance < effective_water_border + effective_beach_width:
+                terrain = "sa"  # Sand (beach inside water)
             else:
                 val = noise[r, c]
-                if val < 0.15:
+                # Add jitter to all biome thresholds for more organic edges
+                jitter_mo = random.uniform(-0.03, 0.03)
+                jitter_gr = random.uniform(-0.03, 0.03)
+                jitter_pl = random.uniform(-0.03, 0.03)
+                jitter_fo = random.uniform(-0.03, 0.03)
+                jitter_co = random.uniform(-0.03, 0.03)
+
+                if val < 0.15 + random.uniform(-0.02, 0.02):
                     terrain = "wa"
-                elif val < 0.25:
+                elif val < 0.25 + random.uniform(-0.02, 0.02):
                     terrain = "sa"
-                elif val < 0.45:
-                    terrain = "pl"
-                elif val < 0.6:
-                    terrain = "fo"
-                elif val < 0.75:
-                    terrain = "de"
-                elif val < 0.9:
+                elif val < 0.45 + jitter_mo:
                     terrain = "mo"
+                elif val < 0.6 + jitter_gr:
+                    terrain = "gr"
+                elif val < 0.75 + jitter_pl:
+                    terrain = "pl"
+                elif val < 0.85 + jitter_fo:
+                    terrain = "fo"
                 else:
-                    terrain = "sn"
+                    terrain = "co"
 
             row.append(terrain)
         grid.append(row)

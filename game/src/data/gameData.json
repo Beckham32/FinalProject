@@ -1,41 +1,12 @@
 {
   "biomes": [
-    {
-      "id": "forest",
-      "name": "Whispering Woods",
-      "description": "A lush forest with rustling leaves and hidden secrets.",
-      "backgroundColor": "#3a5f0b",
-      "enemies": ["goblin", "wolf"],
-      "resources": ["wood", "herbs"],
-      "difficulty": 1
-    },
-    {
-      "id": "plains",
-      "name": "Sunmeadow Fields",
-      "description": "Open fields filled with sunlight, roaming deer, and foraging grounds.",
-      "backgroundColor": "#a3c962",
-      "enemies": ["bandit", "boar"],
-      "resources": ["grain", "leather"],
-      "difficulty": 1
-    },
-    {
-      "id": "desert",
-      "name": "Scorched Sands",
-      "description": "An arid wasteland with unforgiving heat and ancient ruins.",
-      "backgroundColor": "#d2a95a",
-      "enemies": ["scorpion", "sandWraith"],
-      "resources": ["copper", "cactusJuice"],
-      "difficulty": 2
-    },
-    {
-      "id": "mountain",
-      "name": "Frostpeak Range",
-      "description": "Icy cliffs where the air is thin and the beasts are thick-skinned.",
-      "backgroundColor": "#7da4c3",
-      "enemies": ["iceGolem", "snowWolf"],
-      "resources": ["iceCrystal", "stone"],
-      "difficulty": 3
-    }
+    { "code": "wa", "name": "Ocean" },
+    { "code": "sa", "name": "Beach" },
+    { "code": "pl", "name": "Plains" },
+    { "code": "fo", "name": "Forest" },
+    { "code": "co", "name": "Coniferous Forest" },
+    { "code": "gr", "name": "Grasslands" },
+    { "code": "mo", "name": "Mountain" }
   ],
   "items": [
     {
@@ -67,7 +38,7 @@
       "id": "chamomile",
       "name": "Clump of Chamomile",
       "type": "herb"
-    }, 
+    },
     {
       "id": "glass",
       "name": "Glass Shard",
@@ -104,7 +75,7 @@
       "name": "Copper Ingot",
       "type": "material",
       "recipe": {
-        "unrefined_copper": 1, 
+        "unrefined_copper": 1,
         "coal": 1
       },
       "via": "blasting"
@@ -114,7 +85,7 @@
       "name": "Flask of Water",
       "type": "material",
       "recipe": {
-        "glass": 1, 
+        "glass": 1,
         "coal": 1
       },
       "via": "blasting"
