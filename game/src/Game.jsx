@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./Game.css";
 import P5Wrapper from "./components/P5Canvas.jsx";
-import Input from "./components/Input.jsx";
+import MainMenu from "./components/MainMenu.jsx";
 import PauseMenu from "./components/PauseMenu.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -49,11 +49,7 @@ function Game() {
     return () => clearInterval(interval);
   }, [frameRate]);
 
-  const onFormSubmit = (event) => {
-    // Handle form submission
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    sharedRef.current.heroName = formData.get("hero-name");
+  const onPlay = (event) => {
     setGameState("loading");
   };
 
@@ -66,48 +62,27 @@ function Game() {
       <P5Wrapper sharedRef={sharedRef} />
       {gameState === "paused" && <PauseMenu onClose={handleClose} />}
       <main className="ui-overlay flex flex-col items-center justify-center h-full w-full bg-transparent">
-        {gameState === "menu" && (
-          <div className="bg-wood w-full min-h-screen flex flex-col items-center justify-center">
-            <h1 className="text-4xl text-tan font-bold p-8 space-y-6">
-              Welcome to the Game
-            </h1>
-            <form
-              onSubmit={onFormSubmit}
-              className="flex flex-col items-center gap-8"
-            >
-              <Input
-                type="text"
-                placeholder="Enter your hero's name..."
-                required={false} // change in build to true
-                name="hero-name"
-              />
-              <Input type="submit" value="Start Game" />
-            </form>
-          </div>
-        )}
+        {gameState === "menu" && <MainMenu onSubmit={onPlay} />}
         {gameState === "loading" && (
-          <div className="text-tan bg-wood w-full min-h-screen flex flex-col items-center justify-center">
+          <div className="text-tan bg-wood w-full text-2xl min-h-screen flex flex-col items-center justify-center">
             Loading World...
           </div>
         )}
         {gameState === "game" && (
           <>
-            <div className="absolute top-5 left-5 flex items-start space-x-8 text-gold font-serif bg-black/70 p-5 rounded-lg shadow-lg">
+            <div className="absolute top-5 left-5 flex items-start space-x-8 text-gold font-serif bg-black/70 px-5 pt-5 pb-10 rounded-lg shadow-lg">
               {/* Level Badge */}
               <div className="relative w-20 h-20 mt-4 rounded-full bg-gradient-to-br from-[#1a1109] to-black shadow-2xl border-[3px] border-gold flex items-center justify-center text-4xl font-extrabold text-gold tracking-widest ring-[3px] ring-gold/50 z-10">
                 {/* Outer Decorative Ring */}
                 <div className="absolute inset-1 rounded-full border-2 border-gold/30 ring-1 ring-inset ring-gold/20 shadow-inner pointer-events-none"></div>
-
                 {/* Crown or Symbol */}
                 <div className="absolute -top-4 text-gold text-[1.5rem]">
                   <FontAwesomeIcon icon={faCrown} />
                 </div>
-
                 {/* Level Number */}
                 <span className="drop-shadow-glow text-gold/90 text-4xl font-bold">
                   {sharedRef.current.level || 1}
                 </span>
-
                 {/* Nameplate */}
                 <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-br from-black via-[#1a1109] to-black px-4 py-1 text-sm text-gold border-2 border-gold/60 rounded-full shadow-md shadow-gold/20 backdrop-blur-sm">
                   {sharedRef.current.heroName || "Player"}
@@ -167,7 +142,7 @@ function Game() {
               {[1, 2, 3].map((num) => (
                 <button
                   key={num}
-                  className="py-3 px-5 text-xl border-2 border-gold bg-black/70 text-gold rounded-lg shadow-lg hover:bg-gold hover:text-black transition-colors duration-200"
+                  className="py-3 px-5 text-xl border-2 border-gold bg-black/70 text-gold rounded-lg shadow-lg hover:bg-gold/50 hover:text-dark transition-all duration-200"
                 >
                   {num}
                 </button>
@@ -182,7 +157,7 @@ function Game() {
             {/* Pause Menu Button */}
             <div className="absolute top-4 right-4">
               <button
-                className="py-3 px-4.5 text-xl border-2 border-gold bg-black/70 text-gold rounded-lg shadow-lg hover:bg-gold hover:text-black transition-colors duration-200"
+                className="py-3 px-4.5 text-xl border-2 border-gold bg-black/70 text-gold rounded-lg shadow-lg hover:bg-gold/50 hover:text-dark transition-colors duration-200"
                 onClick={() => setGameState("paused")}
               >
                 <FontAwesomeIcon icon={faBars} />

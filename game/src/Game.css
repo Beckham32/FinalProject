@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-border-wood: #7B4B29;
-  --color-wood:rgb(68, 41, 23);
-  --color-dark-wood:rgb(48, 29, 16);
-  --color-ingrain:rgb(153, 106, 67);
-  --color-parchment: #F4EBD0;
-  --color-dark:rgb(19, 19, 19);
-  --color-tan:rgb(216, 189, 131);
-  --color-gold: rgb(226, 173, 94)
+  --color-border-wood: #7b4b29;
+  --color-wood: rgb(68, 41, 23);
+  --color-dark-wood: rgb(48, 29, 16);
+  --color-ingrain: rgb(153, 106, 67);
+  --color-parchment: #f4ebd0;
+  --color-dark: rgb(19, 19, 19);
+  --color-tan: rgb(216, 189, 131);
+  --color-gold: rgb(226, 173, 94);
 }
 
 button {

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { motion, LayoutGroup } from "framer-motion";
+import { motion, LayoutGroup, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCoins, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const TABS = ["Inventory", "Map", "Crafting", "Blasting", "Quests", "Settings"];
 
@@ -29,7 +29,7 @@ function PauseMenu({ onClose }) {
 
   function renderQuests() {
     return (
-      <div className="p-4 bg-slate-950 min-h-screen">
+      <div className="p-4min-h-screen">
         <h2 className="text-xl font-bold mb-4">Quests</h2>
         <p>Quests.</p>
       </div>
@@ -38,7 +38,7 @@ function PauseMenu({ onClose }) {
 
   function renderBlasting() {
     return (
-      <div className="p-4 bg-slate-950 min-h-screen">
+      <div className="p-4 min-h-screen">
         <h2 className="text-xl font-bold mb-4">Blasting</h2>
         <p>Blasting.</p>
       </div>
@@ -47,7 +47,7 @@ function PauseMenu({ onClose }) {
 
   function renderCrafting() {
     return (
-      <div className="p-4 bg-slate-950 min-h-screen">
+      <div className="p-4 min-h-screen">
         <h2 className="text-xl font-bold mb-4">Crafting</h2>
         <p>Crafting.</p>
       </div>
@@ -56,7 +56,7 @@ function PauseMenu({ onClose }) {
 
   function renderSettings() {
     return (
-      <div className="p-4 bg-slate-950 min-h-screen">
+      <div className="p-4 min-h-screen">
         <h2 className="text-xl font-bold mb-4">Settings</h2>
         <p>Audio, Video, Controls, etc.</p>
       </div>
@@ -70,7 +70,7 @@ function PauseMenu({ onClose }) {
   function renderInventory() {
     return (
       <>
-        <div className="p-4 flex space-x-8 justify-center bg-slate-950 min-h-screen">
+        <div className="p-4 flex space-x-8 justify-center min-h-screen">
           <div className="">
             <h3 className="text-lg font-semibold my-2">Armor</h3>
             <div className="grid grid-cols-1 gap-3">
@@ -121,7 +121,11 @@ function PauseMenu({ onClose }) {
                   className="border border-gold rounded p-2 bg-black/70 text-gold flex items-center justify-between h-12"
                   title={item.name}
                 >
-                  <img className="w-8 h-8 rounded me-4" src="https://picsum.photos/200" alt="icon" />
+                  <img
+                    className="w-8 h-8 rounded me-4"
+                    src="https://picsum.photos/200"
+                    alt="icon"
+                  />
                   <span className="flex-1">{item.name}</span>
                   <span className="text-sm font-sans font-bold">
                     x{item.count}
@@ -163,35 +167,51 @@ function PauseMenu({ onClose }) {
   }
 
   return (
-    <div className="text-gold font-serif flex flex-col items-center justify-center w-full h-full fixed top-0 left-0 z-3 overflow-hidden select-none">
+    <div className="text-gold font-serif flex flex-col items-center justify-center w-full min-h-screen fixed top-0 left-0 z-3 overflow-hidden select-none">
       <header className="flex bg-black/80 w-full">
         <LayoutGroup>
           <ul className="flex w-full">
             {TABS.map((tab) => (
               <li key={tab} className="flex relative">
-                <button
-                  className={`w-50 p-5 text-center font-bold text-lg transition-colors duration-200 ${
+                <div
+                  class={`from-transparent via-[#ffc400] to-transparent transition-all py-0.5 duration-500 ${
                     activeTab === tab
-                      ? "bg-gold text-black"
-                      : "hover:bg-gold/50 hover:text-black"
+                      ? "bg-gradient-to-l"
+                      : "hover:bg-gradient-to-l"
                   }`}
-                  onClick={() => setActiveTab(tab)}
-                  type="button"
                 >
-                  {tab}
-                </button>
-                {activeTab === tab && (
-                  <motion.div
-                    layoutId="underline"
-                    className="absolute bottom-0 left-0 right-0 h-1 bg-gold"
-                  />
-                )}
+                  <button
+                    className={`w-50 p-5 text-center bg-black font-bold text-lg transition-colors duration-200 ${
+                      activeTab === tab
+                        ? "bg-gradient-to-r from-transparent via-gold/75 to-transparent text-white"
+                        : "hover:bg-gradient-to-r from-transparent via-gold/50 to-transparent text-white"
+                    }`}
+                    onClick={() => setActiveTab(tab)}
+                    type="button"
+                  >
+                    {tab}
+                    {activeTab === tab && (
+                      <motion.div
+                        layoutId="tab-underline"
+                        className="absolute left-12 right-12 bottom-4 h-1 rounded bg-gold"
+                        transition={{
+                          type: "spring",
+                          stiffness: 350,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
+          <span className="text-2xl font-bold font-sans p-5 pt-4 me-20 flex flex-row gap-2 items-center">
+            <FontAwesomeIcon icon={faCoins} />0
+          </span>
           <button
             onClick={onClose}
-            className="absolute top-1 right-2 px-5 py-3 text-3xl rounded-full font-extrabold hover:text-white transition-colors duration-200 hover:bg-red-500/50"
+            className="absolute top-1 right-2 px-5 py-3 text-3xl rounded-full font-extrabold hover:text-white transition-colors duration-200 hover:bg-radial from-red-500/50 to-transparent border-2 border-transparent hover:border-red-500"
             aria-label="Close Pause Menu"
             type="button"
           >
@@ -200,8 +220,22 @@ function PauseMenu({ onClose }) {
         </LayoutGroup>
       </header>
 
-      <section className="flex-grow overflow-auto w-full">
-        {renderTabContent()}
+      <section className="flex-grow overflow-auto w-full relative">
+        {activeTab !== "Map" && (
+          <div className="absolute inset-0 bg-slate-950 z-0 pointer-events-none" />
+        )}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -40 }}
+            transition={{ duration: 0.25 }}
+            className="absolute w-full h-full z-10"
+          >
+            {renderTabContent()}
+          </motion.div>
+        </AnimatePresence>
       </section>
     </div>
   );
