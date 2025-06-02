@@ -10,37 +10,37 @@
   ],
   "items": [
     {
-      "id": "wood",
+      "id": "0",
       "name": "Wood Log",
       "type": "material"
     },
     {
-      "id": "leather",
+      "id": "1",
       "name": "Leather Hide",
       "type": "material"
     },
     {
-      "id": "coal",
+      "id": "2",
       "name": "Coal",
       "type": "ore"
     },
     {
-      "id": "unrefined_copper",
+      "id": "3",
       "name": "Unrefined Copper",
       "type": "ore"
     },
     {
-      "id": "sand",
+      "id": "4",
       "name": "Sand",
       "type": "material"
     },
     {
-      "id": "chamomile",
+      "id": "5",
       "name": "Clump of Chamomile",
       "type": "herb"
     },
     {
-      "id": "glass",
+      "id": "6",
       "name": "Glass Shard",
       "type": "material",
       "recipe": {
@@ -51,7 +51,7 @@
       "amount": 2
     },
     {
-      "id": "stick",
+      "id": "7",
       "name": "Wooden Stick",
       "type": "material",
       "recipe": {
@@ -61,7 +61,7 @@
       "amount": 8
     },
     {
-      "id": "leather_wrapped_stick",
+      "id": "8",
       "name": "Leather Wrapped Stick",
       "type": "material",
       "recipe": {
@@ -71,7 +71,7 @@
       "via": "crafting"
     },
     {
-      "id": "copper_ingot",
+      "id": "9",
       "name": "Copper Ingot",
       "type": "material",
       "recipe": {
@@ -81,7 +81,7 @@
       "via": "blasting"
     },
     {
-      "id": "water_flask",
+      "id": "10",
       "name": "Flask of Water",
       "type": "material",
       "recipe": {
@@ -91,7 +91,7 @@
       "via": "blasting"
     },
     {
-      "id": "copper_sword",
+      "id": "11",
       "name": "Copper Sword",
       "type": "weapon",
       "rarity": "common",
@@ -104,7 +104,7 @@
       "via": "crafting"
     },
     {
-      "id": "health_potion",
+      "id": "12",
       "name": "Health Potion",
       "type": "consumable",
       "rarity": "uncommon",

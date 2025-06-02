@@ -23,9 +23,10 @@ export default function sketch(p, sharedRef) {
       this.state = sharedRef.current.gameState;
       this.world = new World(this);
       this.player = new Player(this);
-      this.itemSystem = new ItemSystem(this);
+      this.entityManager = new MapEntityManager(this);
       this.children = [];
       this.children.push(this.world);
+      this.children.push(this.entityManager);
       this.children.push(this.player);
     }
     show() {
@@ -60,11 +61,43 @@ export default function sketch(p, sharedRef) {
       this.maxSpeed = 8;
       this.friction = 0.9;
       this.level = 1;
-      this.armor = [];
       this.direction = 1;
       this.sprite = spriteSheet;
+      this.radius = this.size * 1.5;
+      this.stats = {
+        strength: 10,
+        defense: 10,
+        intelligence: 10,
+      };
+      this.inventory = {
+        tools: [
+          { name: "Sword", type: "weapon", strength: 10 },
+          { name: "Shield", type: "tool", defense: 8 },
+        ],
+        potions: [
+          {
+            name: "Health Potion",
+            type: "potion",
+            effect: "restoreHealth",
+            amount: 20,
+          },
+          {
+            name: "Mana Potion",
+            type: "potion",
+            effect: "restoreMana",
+            amount: 20,
+          },
+        ],
+        armor: [
+          { name: "Leather Helmet", type: "armor", defense: 5 },
+          { name: "Steel Boots", type: "armor", defense: 10 },
+        ],
+        items: [
+          { name: "Wood", type: "item", count: 5, value: 1 },
+          { name: "Leather", type: "item", count: 1, value: 0.5 },
+        ],
+      };
     }
-
     show() {
       p.push();
       p.translate(p.windowWidth / 2, p.windowHeight / 2);
@@ -72,8 +105,15 @@ export default function sketch(p, sharedRef) {
       p.imageMode(p.CENTER);
       p.image(spriteSheet, 0, 0, this.size, this.size);
       p.pop();
-    }
 
+      // p.fill(255, 0, 0, 50);
+      // p.ellipse(
+      //   p.windowWidth / 2 + this.x - this.game.player.x,
+      //   p.windowHeight / 2 + this.y - this.game.player.y,
+      //   this.radius,
+      //   this.radius
+      // );
+    }
     update() {
       // Calculate intended velocity based on input
       let nextVelocityX = this.velocityX;
@@ -81,17 +121,21 @@ export default function sketch(p, sharedRef) {
 
       if (p.keyIsDown(p.LEFT_ARROW) || p.keyIsDown("a")) {
         this.direction = -1;
-        nextVelocityX -= this.acceleration;
+        nextVelocityX -= this.acceleration / 1.5;
       }
       if (p.keyIsDown(p.RIGHT_ARROW) || p.keyIsDown("d")) {
         this.direction = 1;
-        nextVelocityX += this.acceleration;
+        nextVelocityX += this.acceleration / 1.5;
       }
-        
+
       if (p.keyIsDown(p.UP_ARROW) || p.keyIsDown("w"))
-        nextVelocityY -= this.acceleration;
+        nextVelocityY -= this.acceleration / 2;
       if (p.keyIsDown(p.DOWN_ARROW) || p.keyIsDown("s"))
-        nextVelocityY += this.acceleration;
+        nextVelocityY += this.acceleration / 2;
+
+      if (p.keyIsDown("e")) {
+        // Pickup Logic
+      }
 
       nextVelocityX *= this.friction;
       nextVelocityY *= this.friction;
@@ -227,27 +271,50 @@ export default function sketch(p, sharedRef) {
     }
   }
 
-  class ItemSystem {
-    // Item system to manage items and inventory
+  class MapEntityManager {
     constructor(game) {
       this.game = game;
-      this.item = new Item(this);
-      this.inventory = new Inventory(this);
-      this.items = gameData.items; // Load items from game data
+      this.entities = [];
+
+      const px = game.player.x;
+      const py = game.player.y;
+
+      this.add(new MapEntity("Wood", px + 100, py + 150));
     }
+    add(entity) {
+      this.entities.push(entity);
+    }
+    show() {
+      for (let e of this.entities) {
+        e.show(p, this.game.player);
+      }
+    }
+    update() {}
   }
 
-  class Item {
-    // Item class to handle individual item properties
-    constructor(ItemSystem) {
-      this.itemSystem = ItemSystem;
+  class MapEntity {
+    constructor(name, x, y) {
+      this.name = name;
+      this.x = x;
+      this.y = y;
     }
-  }
+    show(p, player) {
+      const screenX = p.windowWidth / 2 + (this.x - player.x);
+      const screenY = p.windowHeight / 2 + (this.y - player.y);
 
-  class Inventory {
-    // Inventory class to manage player's inventory
-    constructor(ItemSystem) {
-      this.itemSystem = ItemSystem;
+      p.fill(255);
+      p.stroke(0);
+      p.strokeWeight(3);
+      p.textSize(14);
+      p.textAlign(p.CENTER);
+      p.text(this.name, screenX, screenY - 20);
+      p.noStroke();
+
+      p.fill(217, 0, 255);
+      p.ellipse(screenX, screenY, 16, 16);
+      p.fill(166, 0, 255, 75);
+      p.ellipse(screenX, screenY, 24, 24);
+      p.ellipse(screenX, screenY, 32, 32);
     }
   }
 
@@ -275,6 +342,7 @@ export default function sketch(p, sharedRef) {
     }
 
     game = new Game();
+
     p.noStroke();
   };
 

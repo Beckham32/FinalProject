@@ -2,6 +2,13 @@ import { useState } from "react";
 import { motion, LayoutGroup, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoins, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { DndContext, closestCenter, DragOverlay } from "@dnd-kit/core";
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 const TABS = ["Inventory", "Map", "Crafting", "Blasting", "Quests", "Settings"];
 
@@ -26,10 +33,45 @@ const sampleArmor = {
 
 function PauseMenu({ onClose }) {
   const [activeTab, setActiveTab] = useState("Inventory");
+  const [activeDragItem, setActiveDragItem] = useState(null);
+  const [inventory, setInventory] = useState(() => {
+    const slots = Array(56).fill(null);
+    sampleInventory.forEach((item, i) => {
+      slots[i] = item;
+    });
+    return slots;
+  });
+
+  function handleDragEnd(event) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = inventory.findIndex(
+      (item) => item && item.id === active.id
+    );
+    const newIndex = Number(over.id);
+
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    const newInventory = [...inventory];
+
+    // If destination is empty, move
+    if (!newInventory[newIndex]) {
+      newInventory[newIndex] = newInventory[oldIndex];
+      newInventory[oldIndex] = null;
+    } else {
+      // If destination is filled, swap
+      const temp = newInventory[newIndex];
+      newInventory[newIndex] = newInventory[oldIndex];
+      newInventory[oldIndex] = temp;
+    }
+
+    setInventory(newInventory);
+  }
 
   function renderQuests() {
     return (
-      <div className="p-4min-h-screen">
+      <div className="p-4 min-h-screen">
         <h2 className="text-xl font-bold mb-4">Quests</h2>
         <p>Quests.</p>
       </div>
@@ -114,33 +156,38 @@ function PauseMenu({ onClose }) {
 
           <div className="w-2/3">
             <h3 className="text-lg font-semibold my-2">Inventory</h3>
-            <div className="grid grid-cols-5 gap-4">
-              {sampleInventory.map((item) => (
-                <div
-                  key={item.id}
-                  className="border border-gold rounded p-2 bg-black/70 text-gold flex items-center justify-between h-12"
-                  title={item.name}
-                >
-                  <img
-                    className="w-8 h-8 rounded me-4"
-                    src="https://picsum.photos/200"
-                    alt="icon"
-                  />
-                  <span className="flex-1">{item.name}</span>
-                  <span className="text-sm font-sans font-bold">
-                    x{item.count}
-                  </span>
+            <DndContext
+              collisionDetection={closestCenter}
+              onDragStart={(event) => {
+                const { active } = event;
+                setActiveDragItem(
+                  inventory.find((item) => item && item.id === active.id)
+                );
+              }}
+              onDragEnd={(event) => {
+                handleDragEnd(event);
+                setActiveDragItem(null);
+              }}
+              onDragCancel={() => setActiveDragItem(null)}
+            >
+              <SortableContext
+                items={Array.from({ length: 56 }, (_, i) => i.toString())}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className="grid grid-cols-7 gap-4">
+                  {inventory.map((item, idx) => (
+                    <InventorySlot key={idx} id={idx.toString()}>
+                      {item && <DraggableInventoryItem item={item} />}
+                    </InventorySlot>
+                  ))}
                 </div>
-              ))}
-              {Array.from({ length: 35 - sampleInventory.length }).map(
-                (_, i) => (
-                  <div
-                    key={`empty-${i}`}
-                    className="border border-gold rounded p-2 bg-black/20 text-gold flex items-center justify-center h-12 text-sm"
-                  ></div>
-                )
-              )}
-            </div>
+              </SortableContext>
+              <DragOverlay>
+                {activeDragItem ? (
+                  <DraggableInventoryItem item={activeDragItem} />
+                ) : null}
+              </DragOverlay>
+            </DndContext>
           </div>
         </div>
       </>
@@ -164,6 +211,59 @@ function PauseMenu({ onClose }) {
       default:
         return null;
     }
+  }
+
+  function InventorySlot({ id, children }) {
+    const { setNodeRef, attributes, isOver, active } = useSortable({ id });
+
+    return (
+      <div
+        ref={setNodeRef}
+        {...attributes}
+        className={`border border-gold rounded p-2 h-20 flex items-center justify-center transition-colors duration-200
+          ${isOver ? "bg-gold/20" : "bg-black/20"}`}
+        style={{ minHeight: "3rem" }}
+      >
+        {children}
+      </div>
+    );
+  }
+
+  function DraggableInventoryItem({ item }) {
+    const {
+      attributes,
+      listeners,
+      setNodeRef,
+      transform,
+      transition,
+      isDragging,
+    } = useSortable({ id: item.id });
+
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+      zIndex: isDragging ? 50 : 1,
+      opacity: isDragging ? 0.5 : 1,
+    };
+
+    return (
+      <div
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+        style={style}
+        className="rounded text-gold flex items-center justify-between w-full cursor-move"
+        title={item.name}
+      >
+        <img
+          className="w-8 h-8 rounded me-4"
+          src="https://picsum.photos/200"
+          alt="icon"
+        />
+        <span className="flex-1">{item.name}</span>
+        <span className="text-sm font-sans font-bold">x{item.count}</span>
+      </div>
+    );
   }
 
   return (

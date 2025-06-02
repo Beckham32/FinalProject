@@ -70,35 +70,24 @@ function Game() {
         )}
         {gameState === "game" && (
           <>
-            <div className="absolute top-5 left-5 flex items-start space-x-8 text-gold font-serif bg-black/70 px-5 pt-5 pb-10 rounded-lg shadow-lg">
+            <div className="absolute top-5 left-5 flex items-start text-gold font-serif bg-black/0 rounded-lg ps-5 py-5 pe-95 drop-shadow-xl">
               {/* Level Badge */}
-              <div className="relative w-20 h-20 mt-4 rounded-full bg-gradient-to-br from-[#1a1109] to-black shadow-2xl border-[3px] border-gold flex items-center justify-center text-4xl font-extrabold text-gold tracking-widest ring-[3px] ring-gold/50 z-10">
+              <div className="relative w-20 h-20 rounded-full drop-shadow-xl bg-gradient-to-br from-[#1a1109] to-black shadow-2xl border-[3px] border-gold flex items-center justify-center text-4xl font-extrabold text-gold tracking-widest ring-[3px] ring-gold/50 z-10">
                 {/* Outer Decorative Ring */}
-                <div className="absolute inset-1 rounded-full border-2 border-gold/30 ring-1 ring-inset ring-gold/20 shadow-inner pointer-events-none"></div>
-                {/* Crown or Symbol */}
-                <div className="absolute -top-4 text-gold text-[1.5rem]">
-                  <FontAwesomeIcon icon={faCrown} />
-                </div>
+                <div className="absolute inset-2 rounded-full border-2 border-gold/30 ring-1 ring-inset ring-gold/20 shadow-inner pointer-events-none"></div>
                 {/* Level Number */}
-                <span className="drop-shadow-glow text-gold/90 text-4xl font-bold">
+                <span className="text-gold text-4xl font-bold font-sans">
                   {sharedRef.current.level || 1}
                 </span>
-                {/* Nameplate */}
-                <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-br from-black via-[#1a1109] to-black px-4 py-1 text-sm text-gold border-2 border-gold/60 rounded-full shadow-md shadow-gold/20 backdrop-blur-sm">
-                  {sharedRef.current.heroName || "Player"}
-                </div>
               </div>
+
               {/* Stats Panel */}
-              <div className="flex flex-col justify-center space-y-8 mt-8">
+              <div className="absolute left-16 flex flex-col justify-center space-y-2">
                 {/* Health */}
                 <div className="w-96 h-6 relative">
-                  <span className="absolute -top-5 left-0 text-xs tracking-wide text-gold uppercase font-bold font-serif">
-                    <FontAwesomeIcon icon={faHeart} /> Health
-                  </span>
-
-                  <div className="w-full h-full border-b-3 border-parchment relative shadow-lg">
+                  <div className="w-full h-full border-b-3 border-white bg-gradient-to-r from-red-950 to-red-500 relative shadow-lg drop-shadow-xl">
                     <div
-                      className="absolute top-0 left-0 h-full bg-[#ca4040] transition-all duration-300"
+                      className="absolute top-0 left-0 h-full bg-gradient-to-l from-[#ffffff] via-[#65ff36] to-[#308516] transition-all duration-300 drop-shadow-lg"
                       style={{
                         width: `${
                           (sharedRef.current.health /
@@ -109,18 +98,12 @@ function Game() {
                     ></div>
                     <div className="absolute inset-0 pointer-events-none"></div>
                   </div>
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2 text-s text-parchment font-bold">
-                    {sharedRef.current.health}/{sharedRef.current.maxHealth}
-                  </div>
                 </div>
 
                 <div className="w-72 h-6 relative">
-                  <span className="absolute -top-5 left-0 text-xs tracking-wide text-gold uppercase font-bold font-serif">
-                    <FontAwesomeIcon icon={faDiamond} /> Mana
-                  </span>
-                  <div className="w-full h-full border-b-3 border-parchment relative shadow-lg">
+                  <div className="w-full h-full border-b-3 border-white bg-gradient-to-r from-red-950 to-red-500 relative shadow-lg drop-shadow-xl">
                     <div
-                      className="absolute top-0 left-0 h-full bg-[#3e7bc4] transition-all duration-300"
+                      className="absolute top-0 left-0 h-full bg-gradient-to-l from-[#ffffff] via-[#3e7bc4] to-[#1ccaff] transition-all duration-300"
                       style={{
                         width: `${
                           (sharedRef.current.mana / sharedRef.current.maxMana) *
@@ -129,9 +112,6 @@ function Game() {
                       }}
                     ></div>
                     <div className="absolute inset-0 pointer-events-none"></div>
-                  </div>
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2 text-s text-parchment font-bold">
-                    {sharedRef.current.mana}/{sharedRef.current.maxMana}
                   </div>
                 </div>
               </div>
