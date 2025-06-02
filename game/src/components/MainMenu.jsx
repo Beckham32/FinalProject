@@ -7,10 +7,13 @@ const MainMenu = ({ onSubmit }) => {
 
       {buttons.map((name) => {
         return (
-          <div class="hover:bg-gradient-to-l from-transparent via-[#ffc400] w-150 to-transparent mb-4 py-0.5 transition-all duration-500">
+          <div
+            className="hover:bg-gradient-to-l from-transparent via-[#ffc400] w-150 to-transparent mb-4 py-0.5"
+            key={name}
+          >
             <button
-              className="text-white bg-slate-950 text-shadow-lg w-full text-2xl hover:bg-gradient-to-r from-transparent py-1 via-gold/50 to-transparent transition-all duration-500"
-              onClick={name === "PLAY" && onSubmit}
+              className="text-white bg-slate-950 text-shadow-lg w-full text-2xl hover:bg-gradient-to-r from-transparent py-1 via-gold/50 to-transparent"
+              onClick={name === "PLAY" ? onSubmit : undefined}
             >
               {name}
             </button>

@@ -1,6 +1,19 @@
 import gameData from "./data/gameData.json"; // Import game data
 import map from "./data/map.json"; // Import Map
 
+let spriteSheet;
+let assetsLoaded = false;
+
+function loadAssets(p) {
+  return new Promise((resolve) => {
+    p.loadImage("/assets/Player.png", (img) => {
+      spriteSheet = img;
+      assetsLoaded = true;
+      resolve();
+    });
+  });
+}
+
 export default function sketch(p, sharedRef) {
   let game; // Declare game variable
 
@@ -36,7 +49,7 @@ export default function sketch(p, sharedRef) {
       this.name = sharedRef.current.heroName;
       this.x = (map[0].length * game.world.tileSize) / 2;
       this.y = (map.length * game.world.tileSize) / 2;
-      this.size = 64;
+      this.size = 128;
       this.velocityX = 0;
       this.velocityY = 0;
       this.maxHealth = 100;
@@ -48,12 +61,17 @@ export default function sketch(p, sharedRef) {
       this.friction = 0.9;
       this.level = 1;
       this.armor = [];
+      this.direction = 1;
+      this.sprite = spriteSheet;
     }
 
     show() {
-      // Draw the player at the center of the screen
-      p.fill(255, 0, 0);
-      p.ellipse(p.width / 2, p.height / 2, this.size);
+      p.push();
+      p.translate(p.windowWidth / 2, p.windowHeight / 2);
+      p.scale(this.direction, 1);
+      p.imageMode(p.CENTER);
+      p.image(spriteSheet, 0, 0, this.size, this.size);
+      p.pop();
     }
 
     update() {
@@ -61,10 +79,15 @@ export default function sketch(p, sharedRef) {
       let nextVelocityX = this.velocityX;
       let nextVelocityY = this.velocityY;
 
-      if (p.keyIsDown(p.LEFT_ARROW) || p.keyIsDown("a"))
+      if (p.keyIsDown(p.LEFT_ARROW) || p.keyIsDown("a")) {
+        this.direction = -1;
         nextVelocityX -= this.acceleration;
-      if (p.keyIsDown(p.RIGHT_ARROW) || p.keyIsDown("d"))
+      }
+      if (p.keyIsDown(p.RIGHT_ARROW) || p.keyIsDown("d")) {
+        this.direction = 1;
         nextVelocityX += this.acceleration;
+      }
+        
       if (p.keyIsDown(p.UP_ARROW) || p.keyIsDown("w"))
         nextVelocityY -= this.acceleration;
       if (p.keyIsDown(p.DOWN_ARROW) || p.keyIsDown("s"))
@@ -243,15 +266,19 @@ export default function sketch(p, sharedRef) {
     ref.frameRate = p.frameRate();
   }
 
-  p.setup = function () {
-    // Setup the p5 canvas and initialize the game
+  p.setup = async function () {
     p.createCanvas(p.windowWidth, p.windowHeight);
+    await loadAssets(p);
+    if (!spriteSheet) {
+      console.error("Sprite sheet failed to load.");
+      return;
+    }
+
     game = new Game();
     p.noStroke();
   };
 
   p.windowResized = function () {
-    // Handle window resize to adjust canvas and player position
     p.resizeCanvas(p.windowWidth, p.windowHeight);
   };
 
@@ -271,7 +298,6 @@ export default function sketch(p, sharedRef) {
       minimapInstance.show();
       return;
     } else {
-      // If you want to clear the minimap when unpausing:
       minimapInstance = null;
     }
 

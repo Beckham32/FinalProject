@@ -174,7 +174,7 @@ function PauseMenu({ onClose }) {
             {TABS.map((tab) => (
               <li key={tab} className="flex relative">
                 <div
-                  class={`from-transparent via-[#ffc400] to-transparent transition-all py-0.5 duration-500 ${
+                  className={`from-transparent via-[#ffc400] to-transparent transition-all py-0.5 duration-500 ${
                     activeTab === tab
                       ? "bg-gradient-to-l"
                       : "hover:bg-gradient-to-l"
