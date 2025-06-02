@@ -1,6 +1,30 @@
-# Persistent RPG Game
+# Open World Dungeon Crawler
 
-## 📘 Overview
+## SCOPE
+
+This project will be worked on after the final submission, I am labeling the project submission version *Alpha* which will include a more limited amount of features
+due to the timeframe.
+
+version *Beta* will be the true first release having everything I planned for and a better art direction.
+
+| Alpha                          | Beta                         |
+|--------------------------------|------------------------------|
+| Basic World                    | Defined World with Locations |
+| Simple Menu                    | Expansive Menu (Settings/Quests)         |
+| Low Amounts of Art             | Quests and NPCs              |
+| 1-3 Dungeons                   | Procedural Dungeons                        |
+| Basic Combat System            | Better/More Art                       |
+| Simple Inventory System        | Advanced Inventory System            |
+| 3-4 Enemies                    | More Enemies            |
+| Small Item List                | Large Item Datalist            |
+| **APIs**                       | Advanced Turn-Based Combat            |
+| **APIs**                       | AI Integration            |
+| **APIs**                       | Economy System            |
+| **APIs**                       | Custom + External            |
+| **APIs**                       | Custom + External            |
+| **APIs**                       | Custom + External            |
+
+## Overview
 
 This project is a *persistent*, RPG where the player explores an evolving open world, completes quests, dives into procedurally generated dungeons, and interacts with NPCs whose behaviour adapts using AI. Combat, inventory, quests, and dynamic world events form the core gameplay loop.
 
@@ -9,7 +33,7 @@ Parts of this will not be finished for Beta Release.
 
 ---
 
-## 🌍 Game Structure
+## Game Structure
 
 ### Core Components
 - **World Map**: Interconnected cities, towns, forests, caves, and dungeons.
@@ -20,7 +44,7 @@ Parts of this will not be finished for Beta Release.
 
 ---
 
-## 🧱 OOP Classes & Data Structures
+## OOP Classes & Data Structures
 
 ### Classes
 
@@ -34,15 +58,9 @@ Parts of this will not be finished for Beta Release.
 - **`Quest`**: Story or task structure with objectives and progression methods.
 - **`CombatSystem`**: Turn management and combat resolution.
 
-### Data Structures
-
-- **Graphs / Trees**: Represent the world map layout.
-- **HashMaps**: Store inventory, gear, and player stats.
-- **Queues**: Used in turn-based combat mechanics.
-
 ---
 
-## 🔌 API Integration
+## API Integration
 
 ### Dynamic Systems
 
@@ -57,7 +75,7 @@ Parts of this will not be finished for Beta Release.
 
 - **Procedural Layouts**: Randomized room and enemy placement.
 - **Dynamic Difficulty**: Scales with player level or location.
-- **Combat Options**: Turn-based, action, or hybrid systems supported.
+- **Combat**: Turn-based.
 
 ---
 
@@ -65,7 +83,6 @@ Parts of this will not be finished for Beta Release.
 
 - **Real-World Economy**: NPC prices and behaviour adjust based on global data.
 - **Adaptive Dialogue**: Contextual and branching based on player decisions and events.
-- **Live Quests**: Generated in response to real-world triggers or player milestones.
 
 ---
 
@@ -88,24 +105,11 @@ Parts of this will not be finished for Beta Release.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-| Layer         | Tech                     |
+| Layer         | Tech                      |
 |---------------|---------------------------|
 | **Frontend**  | React + Vite              |
 | **UI Styling**| TailwindCSS + Motion      |
-| **Game Logic**| P5.js + P5.play           |
-| **State Mgmt**| Redux                     |
+| **Game Logic**| P5.js                     |
 | **Animation** | Motion                    |
-| **APIs**      | Custom + External         |
-
----
-
-## 💡 Notes
-
-- Modular, scalable OOP design.
-- World reacts to real-world data, not just static storylines.
-- Goals: Exploration, evolving storylines, and endless replayability.
-
----
-
