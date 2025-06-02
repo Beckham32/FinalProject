@@ -2,27 +2,24 @@
 
 ## SCOPE
 
-This project will be worked on after the final submission, I am labeling the project submission version *Alpha* which will include a more limited amount of features
+This project will be worked on after the final submission, I am labeling the project submission version *v1.0.0-alpha* which will include a more limited amount of features
 due to the timeframe.
 
-version *Beta* will be the true first release having everything I planned for and a better art direction.
+version *v2.0.0-beta * will be the true first release having everything I planned for and a better art direction.
 
-| Alpha                          | Beta                         |
-|--------------------------------|------------------------------|
-| Basic World                    | Defined World with Locations |
-| Simple Menu                    | Expansive Menu (Settings/Quests)         |
-| Low Amounts of Art             | Quests and NPCs              |
-| 1-3 Dungeons                   | Procedural Dungeons                        |
-| Basic Combat System            | Better/More Art                       |
-| Simple Inventory System        | Advanced Inventory System            |
-| 3-4 Enemies                    | More Enemies            |
-| Small Item List                | Large Item Datalist            |
-| **APIs**                       | Advanced Turn-Based Combat            |
-| **APIs**                       | AI Integration            |
-| **APIs**                       | Economy System            |
-| **APIs**                       | Custom + External            |
-| **APIs**                       | Custom + External            |
-| **APIs**                       | Custom + External            |
+| v1.0.0-alpha                   | v2.0.0-beta                     |
+|--------------------------------|---------------------------------|
+| Basic World                    | Defined World with Locations    |
+| Simple Menu                    | Expansive Menu (Settings/Quests)|
+| Low Amounts of Art             | Quests and NPCs                 |
+| 1-3 Dungeons                   | Procedural Dungeons             |
+| Basic Combat System            | Better/More Art                 |
+| Simple Inventory System        | Advanced Inventory System       |
+| 3-4 Enemies                    | More Enemies                    |
+| Small Item List                | Large Item Datalist             |
+|                                | Advanced Turn-Based Combat      |
+|                                | AI Integration                  |
+|                                | Economy System                  |
 
 ## Overview
 
